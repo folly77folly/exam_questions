@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Question;
 
 class Option extends Model
 {
@@ -15,4 +16,8 @@ class Option extends Model
         'optionC',
         'optionD',
     ];
+
+    public function options(){
+        return $this->belongsTo(Question::class);
+    }
 }

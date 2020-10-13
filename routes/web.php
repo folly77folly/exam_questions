@@ -19,3 +19,7 @@ Route::get('/', function () {
 
 Route::get('/questions', 'QuestionController@create')->name('create');
 Route::post('/store', 'QuestionController@store')->name('store');
+Route::get('/all', 'QuestionController@index')->name('index');
+
+//ajax routes
+Route::get('/reports', 'QuestionController@report')->name('report');
