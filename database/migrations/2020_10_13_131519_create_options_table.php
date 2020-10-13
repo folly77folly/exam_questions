@@ -15,7 +15,7 @@ class CreateOptionsTable extends Migration
     {
         Schema::create('options', function (Blueprint $table) {
             $table->id();
-            $table->integer('question_id');
+            $table->unsignedBigInteger('question_id');
             $table->string('optionA')->nullable();
             $table->string('optionB')->nullable();
             $table->string('optionC')->nullable();
@@ -23,7 +23,7 @@ class CreateOptionsTable extends Migration
             $table->timestamps();
         });
 
-        Schema::table('questions', function(Blueprint $table)
+        Schema::table('options', function(Blueprint $table)
         {
             $table->foreign('question_id')->references('id')->on('questions');
 
