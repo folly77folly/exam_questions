@@ -3,6 +3,7 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
+use App\Option;
 
 class Question extends Model
 {
@@ -11,4 +12,8 @@ class Question extends Model
         'question',
         'category_id'
     ];
+
+    public function options(){
+        return $this->hasOne(Option::class);
+    }
 }

@@ -9,6 +9,15 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
+        <!-- Latest compiled and minified CSS -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+        <!-- jQuery library -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+        <!-- Latest compiled JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
         <!-- Styles -->
         <style>
             html, body {
@@ -85,9 +94,22 @@
                 </div>
 
                 <div class="links">
-                <a href="{{route('create')}}">Click Here to Create A Question </a>
+                <button class="btn btn-info"  onclick="createform();">Click Here to Create A Question </button>
                 </div>
             </div>
         </div>
     </body>
 </html>
+
+<script>
+    function createform(){
+        $.ajax({
+            type:"GET",
+            url:" {{ route('create') }} ",
+
+            success: function(data){
+                window.location.href='{{route('create')}}'
+            },
+        })
+    }
+</script>

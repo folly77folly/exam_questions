@@ -7,6 +7,7 @@ use App\Category;
 use App\Http\Requests\QuestionRequest;
 use App\Question;
 use App\Option;
+use App\Constants\Collections;
 
 class QuestionController extends Controller
 {
@@ -18,6 +19,43 @@ class QuestionController extends Controller
     public function index()
     {
         //
+        $categories = Category::all();
+        return view('question.index', compact('categories'));
+
+    }
+
+    public function report()
+    {
+        //
+        $categories = Category::all();
+        $index= Collections::$INDEX;
+        $returnValue = "";
+        foreach ($categories as $category){
+            $returnValue .= "<h2>Category: $category->name </h2>";
+                
+            foreach ($category->questions as $question) {
+                if(isset($question)) {
+                    $returnValue .= '<h4>Question : '.$index. ' '. $question->question .'</h4>
+                    <div class="question-answer">
+                    <label><input type="radio" value="'. $question->options['optionA'] .'" name="cat_id" /><span class="text-option">'. $question->options['optionA'] .'</span></label>
+                    <label><input type="radio" value="'. $question->options['optionB'] .'" name="cat_id" /><span class="text-option">'. $question->options['optionB'] .'</span></label>
+                    <label><input type="radio" value="'. $question->options['optionC'] .'" name="cat_id" /><span class="text-option">'. $question->options['optionC'] .'</span></label>
+                    <label><input type="radio" value="'. $question->options['optionD'] .'" name="cat_id" /><span class="text-option">'. $question->options['optionD'] .'</span></label>
+                    ';
+    
+                    $index++;
+                }else
+
+                $returnValue = '<h4>No Questions</h4>';
+            }
+
+
+        };
+        
+
+    print $returnValue;
+
+
     }
 
     /**
@@ -29,8 +67,11 @@ class QuestionController extends Controller
     {
         //
         $categories = Category::all();
+    
         return view('question.create', compact('categories'));
     }
+
+
 
     /**
      * Store a newly created resource in storage.
@@ -61,7 +102,7 @@ class QuestionController extends Controller
         'question_id' => $question_new->id,
         'optionA' => $optionA, 
         'optionB' => $optionB,
-        'optionB' => $optionC,
+        'optionC' => $optionC,
         'optionD' => $optionD,
     ];
     $question_new = Option::create($optionData);

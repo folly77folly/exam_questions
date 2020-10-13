@@ -92,7 +92,7 @@
                 <div class="title m-b-md">
                     Create Question
                 </div>
-                <div id="errordiv" class="text-danger"></div>
+                <div id="errordiv" class="text-danger font-weight-bold bg-info"></div>
                 <form action="{{route('store')}}" method="POST" >
                     <div class="form-group">
                         <label for="body"></label>
@@ -140,19 +140,25 @@
                         @enderror 
                     </div>
                     <div class="form-group form-check form-check-inline">
-                        @foreach($categories as $category)
-                        <input type="radio" value="{{ $category->id }}" name="category_id" id="category_id" class="form-check-input">
-                        <label for="" class="form-check-label margin-left @error('category_id')is-invalid @enderror">{{$category->name}}</label>
-                        @endforeach
-                        @error('category_id')
-                        <span class="invalid-feedback" role="alert">
-                            <strong>{{ $message }}</strong>
-                        </span>
-                        @enderror 
+                        <fieldset>
+                            <legend class="legend-label">
+                                Category
+                            </legend>
+                            @foreach($categories as $category)
+                            <input type="radio" value="{{ $category->id }}" name="category_id" id="category_id" class="form-check-input mr-4">
+                            <label for="" class="form-check-label ml-5 @error('category_id')is-invalid @enderror">{{$category->name}}</label>
+                            @endforeach
+                            @error('category_id')
+                            <span class="invalid-feedback" role="alert">
+                                <strong>{{ $message }}</strong>
+                            </span>
+                            @enderror 
+                        </fieldset>
                     </div>
 
                     <div>
                         <button class="btn btn-primary" type="button" onclick="createQuestion();">Create a new Question</button>
+                        <button class="btn btn-primary" type="button" onclick="showQuestions();">Show All Questions</button>
                     </div>
                     {{ csrf_field() }}
                 </form>
@@ -177,10 +183,7 @@ function createQuestion(){
     }else{
         $category_id = document.querySelector('input[name="category_id"]:checked').value;
     }
-    // if ($question=="" || optionA == ""){
-    //     Alert("Enter all")
-    // }
-    // var $category_id = document.querySelector('input[name="category_id"]:checked').value;;
+
         $.ajax({
         type:'POST',
         url: "{{ route('store') }}",
@@ -229,5 +232,10 @@ function createQuestion(){
         }
 
     })
+}
+
+
+function showQuestions(){
+    window.location.href = "{{route('index')}}"
 }
 </script>
