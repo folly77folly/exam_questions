@@ -18,4 +18,4 @@ Route::get('/', function () {
 });
 
 Route::get('/questions', 'QuestionController@create')->name('create');
-Route::get('/store', 'QuestionController@store')->name('store');
+Route::post('/store', 'QuestionController@store')->name('store');

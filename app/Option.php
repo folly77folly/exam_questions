@@ -7,4 +7,12 @@ use Illuminate\Database\Eloquent\Model;
 class Option extends Model
 {
     //
+
+    protected $fillable =[
+        'question_id',
+        'optionA',
+        'optionB',
+        'optionC',
+        'optionD',
+    ];
 }

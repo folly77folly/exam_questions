@@ -13,7 +13,7 @@ class QuestionRequest extends FormRequest
      */
     public function authorize()
     {
-        return false;
+        return true;
     }
 
     /**
@@ -25,6 +25,12 @@ class QuestionRequest extends FormRequest
     {
         return [
             //
+            'question'=>['required'],
+            'optionA'=>['required'],
+            'optionB'=>['required'],
+            'optionC'=>['required'],
+            'optionD'=>['required'],
+            'category_id'=>['required'],
         ];
     }
 }

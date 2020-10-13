@@ -9,6 +9,15 @@
         <!-- Fonts -->
         <link href="https://fonts.googleapis.com/css?family=Nunito:200,600" rel="stylesheet">
 
+        <!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+
+<!-- jQuery library -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+<!-- Latest compiled JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+
         <!-- Styles -->
         <style>
             html, body {
@@ -81,13 +90,13 @@
 
             <div class="content">
                 <div class="title m-b-md">
-                    Laravel
+                    Create Question
                 </div>
-                {{-- @include('partials.error-message') --}}
+                <div id="errordiv" class="text-danger"></div>
                 <form action="{{route('store')}}" method="POST" >
                     <div class="form-group">
                         <label for="body"></label>
-                        <textarea name="question" class="form-control @error('question')is-invalid @enderror" placeholder="Enter Questions"></textarea>
+                        <textarea name="question" id="question" class="form-control @error('question')is-invalid @enderror" placeholder="Enter Questions"></textarea>
                         @error('question')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -95,8 +104,8 @@
                         @enderror 
                     </div>
                     <div class="form-group">
-                        <label for="tilte">Option A</label>
-                        <input type="text" name="optionA" class="form-control @error('optionA')is-invalid @enderror">
+                        <label for="optionA">Option A</label>
+                        <input type="text" name="optionA" id="optionA" class="form-control @error('optionA')is-invalid @enderror">
                         @error('optionA')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -105,7 +114,7 @@
                     </div>
                     <div class="form-group">
                         <label for="tilte">Option B</label>
-                        <input type="text" name="optionB" class="form-control @error('optionB')is-invalid @enderror">
+                        <input type="text" name="optionB" id="optionB" class="form-control @error('optionB')is-invalid @enderror">
                         @error('optionB')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -114,7 +123,7 @@
                     </div>
                     <div class="form-group">
                         <label for="tilte">Option C</label>
-                        <input type="text" name="optionC" class="form-control @error('optionC')is-invalid @enderror">
+                        <input type="text" name="optionC" id="optionC" class="form-control @error('optionC')is-invalid @enderror">
                         @error('optionC')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -123,7 +132,7 @@
                     </div>
                     <div class="form-group">
                         <label for="tilte">Option D</label>
-                        <input type="text" name="optionD" class="form-control @error('optionD')is-invalid @enderror">
+                        <input type="text" name="optionD" id="optionD" class="form-control @error('optionD')is-invalid @enderror">
                         @error('optionD')
                         <span class="invalid-feedback" role="alert">
                             <strong>{{ $message }}</strong>
@@ -132,13 +141,18 @@
                     </div>
                     <div class="form-group form-check form-check-inline">
                         @foreach($categories as $category)
-                        <input type="radio" value="{{ $category->id }}" name="category_id[]" class="form-check-input">
-                        <label for="" class="form-check-label margin-left">{{$category->name}}</label>
+                        <input type="radio" value="{{ $category->id }}" name="category_id" id="category_id" class="form-check-input">
+                        <label for="" class="form-check-label margin-left @error('category_id')is-invalid @enderror">{{$category->name}}</label>
                         @endforeach
+                        @error('category_id')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                        @enderror 
                     </div>
 
                     <div>
-                        <button class="btn btn-primary" type="submit">Create a new Question</button>
+                        <button class="btn btn-primary" type="button" onclick="createQuestion();">Create a new Question</button>
                     </div>
                     {{ csrf_field() }}
                 </form>
@@ -146,3 +160,74 @@
         </div>
     </body>
 </html>
+
+<script>
+
+function createQuestion(){
+    // 
+    var $category_id =""
+    var $question = document.getElementById('question').value;
+    var $optionA = document.getElementById('optionA').value;
+    var $optionB = document.getElementById('optionB').value;
+    var $optionC = document.getElementById('optionC').value;
+    var $optionD = document.getElementById('optionD').value;
+    var $category_id = document.querySelector('input[name="category_id"]:checked');
+    if ($category_id === null){
+        $category_id =""
+    }else{
+        $category_id = document.querySelector('input[name="category_id"]:checked').value;
+    }
+    // if ($question=="" || optionA == ""){
+    //     Alert("Enter all")
+    // }
+    // var $category_id = document.querySelector('input[name="category_id"]:checked').value;;
+        $.ajax({
+        type:'POST',
+        url: "{{ route('store') }}",
+        data: {
+            question: $question,
+            optionA: $optionA,
+            optionB: $optionB,
+            optionC: $optionC,
+            optionD: $optionD,
+            category_id: $category_id,
+            _token: '{{csrf_token()}}'
+         },
+
+         beforeSend: function(){
+            // Show image container
+            $("#verifyloader").show();
+            $('#errordiv').hide()
+        },
+        success:function(data){
+            $('#errordiv').html("Question Added Successfully");
+            $('#errordiv').show()  ;
+            document.getElementById('question').value= ""
+            document.getElementById('optionA').value = ""
+            document.getElementById('optionB').value =""
+            document.getElementById('optionC').value =""
+            document.getElementById('optionD').value =""
+        },
+        error:function(data){
+            console.log(data);
+            var errors = data.responseJSON;
+            // console.log(errors.errors)
+            $('#errordiv').html(errors.errors) ;
+            $.each(errors.errors, function(key, value){
+                console.log(value)
+                $('#errordiv').append(value + "<br>")
+                $('#errordiv').show()  ;
+                // showErrorToast(value);
+            });
+            // console.log(JSON.parse(data.responseText));
+            // $('#fullname').val(data);
+
+        },
+        complete:function(data){
+            // Hide image container
+            $("#verifyloader").hide();
+        }
+
+    })
+}
+</script>
