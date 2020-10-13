@@ -80,12 +80,12 @@
             @endif
 
             <div class="content">
-                <div class="title m-b-md">
-                    Laravel
+                <div class="m-b-md">
+                     <h4>Welcome to Questions Creation App Click on the link Below</h4>
                 </div>
 
                 <div class="links">
-                <a href="{{route('create')}}">Enter</a>
+                <a href="{{route('create')}}">Click Here to Create A Question </a>
                 </div>
             </div>
         </div>

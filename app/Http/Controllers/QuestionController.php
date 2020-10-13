@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Category;
+use App\Http\Requests\QuestionRequest;
+use App\Question;
+use App\Option;
 
 class QuestionController extends Controller
 {
@@ -35,9 +38,35 @@ class QuestionController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(QuestionRequest $request)
     {
         //
+        $data = $request->validated();
+        $question = $data['question'];
+        $category_id = $data['category_id'];
+        $optionA = $data['optionA'];
+        $optionB = $data['optionB'];
+        $optionC = $data['optionC'];
+        $optionD = $data['optionD'];
+    //question instance
+    $questionData = [
+        'question'=>$question, 
+        'category_id'=>$category_id
+    ];
+    // dd($questionData);
+    $question_new = Question::create($questionData);
+
+    //option instance
+    $optionData = [
+        'question_id' => $question_new->id,
+        'optionA' => $optionA, 
+        'optionB' => $optionB,
+        'optionB' => $optionC,
+        'optionD' => $optionD,
+    ];
+    $question_new = Option::create($optionData);
+
+
     }
 
     /**
